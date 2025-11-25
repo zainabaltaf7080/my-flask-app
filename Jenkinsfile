@@ -3,6 +3,10 @@ pipeline {
     environment {
         IMAGE_NAME = "flask-app"
     }
+    options {
+        // Force all shell steps to run in bash
+        shell '/bin/bash'
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -12,7 +16,6 @@ pipeline {
         stage('Setup Python Environment') {
             steps {
                 sh '''
-                #!/bin/bash
                 python3 -m venv venv
                 source venv/bin/activate
                 pip install --upgrade pip
@@ -23,7 +26,6 @@ pipeline {
         stage('Lint') {
             steps {
                 sh '''
-                #!/bin/bash
                 source venv/bin/activate
                 flake8 app.py
                 '''
@@ -47,7 +49,6 @@ pipeline {
         stage('Selenium Test') {
             steps {
                 sh '''
-                #!/bin/bash
                 source venv/bin/activate
                 python tests/test_home.py
                 python tests/test_route.py
@@ -64,5 +65,4 @@ pipeline {
         }
     }
 }
-
 
